@@ -6,7 +6,7 @@ exports.calonAll = (req, res) => {
     
     sql.query(`SELECT no_urut,nama_calon, 
     (select sum(rekap_suara.jml_suara) from rekap_suara WHERE rekap_suara.no_urut_calon=tbl_calon.no_urut ) as jml_suara,
-    (select sum(tbl_tps.jml_dtp) as jml_dtp from tbl_tps) as jml_dtp
+    (select sum(tbl_tps.jml_dpt) as jml_dpt from tbl_tps) as jml_dpt
     FROM tbl_calon `, (err, response) => {
         if (err) {
             res.status(500).send(err);
@@ -16,7 +16,7 @@ exports.calonAll = (req, res) => {
             let data1=[];
 
             response.forEach((value) => {
-                percent=(value.jml_suara/value.jml_dtp)*100;
+                percent=(value.jml_suara/value.jml_dpt)*100;
                 var data={
                     nama_calon:value.nama_calon,
                     jml_suara:value.jml_suara,
@@ -87,7 +87,7 @@ exports.calonAll = (req, res) => {
 
 exports.jmlDtp = (req, res) => {
     
-    sql.query("SELECT sum(jml_dtp) as total_dtp,sum(jml_rusak) as total_rusak,(select sum(rekap_suara.jml_suara) from rekap_suara) as total_suara FROM tbl_tps ", (err, response) => {
+    sql.query("SELECT sum(jml_dpt) as total_dtp,sum(jml_rusak) as total_rusak,(select sum(rekap_suara.jml_suara) from rekap_suara) as total_suara FROM tbl_tps ", (err, response) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -109,7 +109,7 @@ exports.jmlDtp = (req, res) => {
 
 exports.hasilTps = (req, res) => {
     
-    sql.query("SELECT idkec,namakec,namakel,sum(jml_dtp) as jml_dtp,sum(jml_rusak) as jml_rusak,(select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='00') as jml_suara_paslon0, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='01') as jml_suara_paslon1, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='02') as jml_suara_paslon2, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='03') as jml_suara_paslon3, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='04') as jml_suara_paslon4, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='05') as jml_suara_paslon5, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='06') as jml_suara_paslon6, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec) as jml_suara FROM tbl_tps group by idkec", (err, response) => {
+    sql.query("SELECT idkec,namakec,namakel,sum(jml_dpt) as jml_dpt,sum(jml_rusak) as jml_rusak,(select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='00') as jml_suara_paslon0, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='01') as jml_suara_paslon1, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='02') as jml_suara_paslon2, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='03') as jml_suara_paslon3, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='04') as jml_suara_paslon4, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='05') as jml_suara_paslon5, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='06') as jml_suara_paslon6, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec) as jml_suara FROM tbl_tps group by idkec", (err, response) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -169,7 +169,7 @@ exports.insertDataUtama = (req, res) => {
 
 
 exports.updateDTP = (req, res) => {  
-    sql.query("UPDATE tbl_tps set jml_dtp='"+req.body.jml_dtp+"',jml_rusak='"+req.body.jml_rusak+"' where no_tps='"+req.body.no_tps+"'  ", (err, response) => {
+    sql.query("UPDATE tbl_tps set jml_dpt='"+req.body.jml_dpt+"',jml_rusak='"+req.body.jml_rusak+"' where no_tps='"+req.body.no_tps+"'  ", (err, response) => {
         if (err) {
             res.status(500).send(err);
         }
