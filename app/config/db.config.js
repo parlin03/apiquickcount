@@ -2,7 +2,7 @@ module.exports = {
     HOST: "localhost",
     USER: "root",
     PASSWORD: "",
-    DB: "db_api_wa_gateway",
+    DB: "db_api_qc",
     dialect: "mysql",
     pool: {
       max: 5,

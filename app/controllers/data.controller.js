@@ -5,7 +5,7 @@ const sql = require("../config/db.js");
 exports.calonAll = (req, res) => {
     
     sql.query(`SELECT no_urut,nama_calon, 
-    (select sum(data_utama.jml_suara) from data_utama WHERE data_utama.no_urut_calon=tbl_calon.no_urut ) as jml_suara,
+    (select sum(rekap_suara.jml_suara) from rekap_suara WHERE rekap_suara.no_urut_calon=tbl_calon.no_urut ) as jml_suara,
     (select sum(tbl_tps.jml_dtp) as jml_dtp from tbl_tps) as jml_dtp
     FROM tbl_calon `, (err, response) => {
         if (err) {
@@ -27,15 +27,27 @@ exports.calonAll = (req, res) => {
             });
             
             const Hasil={
-                jml_suara1:data1[0].jml_suara,
-                jml_suara2:data1[1].jml_suara,
-                jml_suara3:data1[2].jml_suara,
-                persen1:data1[0].persen,
-                persen2:data1[1].persen,
-                persen3:data1[2].persen,
-                nama_calon1:data1[0].nama_calon,
-                nama_calon2:data1[1].nama_calon,
-                nama_calon3:data1[2].nama_calon,
+                jml_suara0:data1[0].jml_suara,
+                jml_suara1:data1[1].jml_suara,
+                jml_suara2:data1[2].jml_suara,
+                jml_suara3:data1[3].jml_suara,
+                jml_suara4:data1[4].jml_suara,
+                jml_suara5:data1[5].jml_suara,
+                jml_suara6:data1[6].jml_suara,
+                persen0:data1[0].persen,
+                persen1:data1[1].persen,
+                persen2:data1[2].persen,
+                persen3:data1[3].persen,
+                persen4:data1[4].persen,
+                persen5:data1[5].persen,
+                persen6:data1[6].persen,
+                nama_calon0:data1[0].nama_calon,
+                nama_calon1:data1[1].nama_calon,
+                nama_calon2:data1[2].nama_calon,
+                nama_calon3:data1[3].nama_calon,
+                nama_calon4:data1[4].nama_calon,
+                nama_calon5:data1[5].nama_calon,
+                nama_calon6:data1[6].nama_calon,
             }
 
             const data ={
@@ -75,7 +87,7 @@ exports.calonAll = (req, res) => {
 
 exports.jmlDtp = (req, res) => {
     
-    sql.query(`SELECT sum(jml_dtp) as total_dtp,sum(jml_rusak) as total_rusak,(select sum(data_utama.jml_suara) from data_utama) as total_suara FROM tbl_tps `, (err, response) => {
+    sql.query("SELECT sum(jml_dtp) as total_dtp,sum(jml_rusak) as total_rusak,(select sum(rekap_suara.jml_suara) from rekap_suara) as total_suara FROM tbl_tps ", (err, response) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -97,12 +109,7 @@ exports.jmlDtp = (req, res) => {
 
 exports.hasilTps = (req, res) => {
     
-    sql.query(`SELECT no_tps,nama_tps,lokasi,jml_dtp,jml_rusak,
-    (select sum(data_utama.jml_suara) from data_utama where data_utama.no_tps=tbl_tps.no_tps and data_utama.no_urut_calon='01') as jml_suara_paslon1, 
-    (select sum(data_utama.jml_suara) from data_utama where data_utama.no_tps=tbl_tps.no_tps and data_utama.no_urut_calon='02') as jml_suara_paslon2,
-    (select sum(data_utama.jml_suara) from data_utama where data_utama.no_tps=tbl_tps.no_tps and data_utama.no_urut_calon='03') as jml_suara_paslon3, 
-    (select sum(data_utama.jml_suara) from data_utama where data_utama.no_tps=tbl_tps.no_tps) as jml_suara
-    FROM tbl_tps `, (err, response) => {
+    sql.query("SELECT idkec,namakec,namakel,sum(jml_dtp) as jml_dtp,sum(jml_rusak) as jml_rusak,(select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='00') as jml_suara_paslon0, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='01') as jml_suara_paslon1, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='02') as jml_suara_paslon2, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='03') as jml_suara_paslon3, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='04') as jml_suara_paslon4, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='05') as jml_suara_paslon5, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec and rekap_suara.no_urut_calon='06') as jml_suara_paslon6, (select sum(rekap_suara.jml_suara) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec) as jml_suara FROM tbl_tps group by idkec", (err, response) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -123,9 +130,7 @@ exports.hasilTps = (req, res) => {
 
  exports.hasilPerCalon = (req, res) => {
     
-    sql.query(`SELECT no_urut,nama_calon, 
-    (select sum(data_utama.jml_suara) from data_utama WHERE data_utama.no_urut_calon=tbl_calon.no_urut ) as jml_suara
-    FROM tbl_calon `, (err, response) => {
+    sql.query("SELECT no_urut,nama_calon, (select sum(rekap_suara.jml_suara) from rekap_suara WHERE rekap_suara.no_urut_calon=tbl_calon.no_urut ) as jml_suara FROM tbl_calon" , (err, response) => {
         if (err) {
             res.status(500).send(err);
         }
@@ -146,7 +151,7 @@ exports.hasilTps = (req, res) => {
 exports.insertDataUtama = (req, res) => {
     const d = new Date();
     let year = d.getFullYear();
-    sql.query("INSERT INTO data_utama (no_tps,no_urut_calon,jml_suara,tahun,created_by) value ('"+req.body.no_tps+"','"+req.body.no_urut+"','"+req.body.jml_suara+"',"+year+",'"+req.body.created_by+"')  ", (err, response) => {
+    sql.query("INSERT INTO rekap_suara (no_tps,no_urut_calon,jml_suara,tahun,created_by,updated_date) value ('"+req.body.no_tps+"','"+req.body.no_urut+"','"+req.body.jml_suara+"',"+year+",'"+req.body.created_by+"', CURRENT_TIMESTAMP)  ", (err, response) => {
         if (err) {
             res.status(500).send(err);
         }
