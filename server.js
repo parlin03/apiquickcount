@@ -7,6 +7,7 @@ const app = express();
 
 var corsOptions = {
   origin: "http://localhost:8081"
+  // origin: "http://api.sonsofadam.org"
 };
 
 app.use(cors(corsOptions));
@@ -29,7 +30,7 @@ app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is d
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to andeznet application." });
+  res.json({ message: "Welcome to api application. Created by parlin" });
 });
 
 require('./app/routes/auth.routes')(app);
