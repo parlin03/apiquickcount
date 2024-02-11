@@ -66,7 +66,7 @@ exports.calonAll = (req, res) => {
 
     exports.getPengumuman = (req, res) => {
         
-        sql.query(`SELECT * FROM tbl_pengumuman `, (err, response) => {
+        sql.query("SELECT namakec, (select count(DISTINCT(rekap_suara.id_tps)) from rekap_suara where rekap_suara.idkec=tbl_tps.idkec) as tps_masuk,count(id_tps)as total_tps FROM `tbl_tps` group by namakec", (err, response) => {
             if (err) {
                 res.status(500).send(err);
             }
@@ -87,7 +87,7 @@ exports.calonAll = (req, res) => {
 
 exports.jmlDtp = (req, res) => {
     
-    sql.query("SELECT sum(jml_dpt) as total_dtp,sum(jml_rusak) as total_rusak,(select sum(rekap_suara.jml_suara) from rekap_suara) as total_suara FROM tbl_tps ", (err, response) => {
+    sql.query("SELECT sum(jml_dpt) as total_dpt,(select sum(rekap_suara.jml_suara) from rekap_suara) as total_suara, count(id_tps) as total_tps, (select count(DISTINCT(rekap_suara.id_tps)) from rekap_suara) as tps_masuk  FROM tbl_tps", (err, response) => {
         if (err) {
             res.status(500).send(err);
         }

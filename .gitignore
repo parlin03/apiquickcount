@@ -6,6 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+app/config/db.config.js
+package.json
 server.js*
 app/config/
 # Diagnostic reports (https://nodejs.org/api/report.html)
